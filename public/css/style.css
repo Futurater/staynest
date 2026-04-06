@@ -1,0 +1,247 @@
+body {
+    font-family: "Montserrat", sans-serif !important;
+    background-color: #f8fafc;
+    color: #111827;
+}
+
+.container {
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+}
+
+/* Navbar */
+.navbar {
+    min-height: 5rem;
+    text-align: center;
+    background: #111827 !important;
+    box-shadow: 0 8px 20px rgba(17, 24, 39, 0.2);
+}
+
+.navbar-brand.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #f9fafb !important;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.brand-badge {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f472b6, #fb7185);
+    color: #ffffff;
+    box-shadow: 0 6px 14px rgba(244, 114, 182, 0.35);
+}
+
+.brand-text {
+    color: #f9fafb;
+}
+
+.nav-link {
+    color: #e5e7eb !important;
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 999px !important;
+    padding: 0.45rem 1rem !important;
+    font-weight: 600 !important;
+}
+
+.btn-dark {
+    background-color: #111827 !important;
+    border-color: #111827 !important;
+}
+
+.btn-dark:hover {
+    background-color: #1f2937 !important;
+    border-color: #1f2937 !important;
+}
+
+/* Footer */
+.f-info-links a {
+    text-decoration: none;
+    color: #374151;
+    margin: 0 0.5rem;
+}
+
+.f-info-links a:hover {
+    color: #111827;
+}
+
+.f-info-links {
+    width: 100%;
+}
+
+.f-info-socials {
+    width: 100%;
+    font-size: 1.35rem;
+    text-decoration: none;
+    color: #4b5563;
+}
+
+.f-info-socials i {
+    margin: 0 0.4rem;
+}
+
+.f-info {
+    min-height: 8rem;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #e5e7eb;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+/* Listings */
+.row a {
+    text-decoration: none;
+}
+
+.card {
+    border: none !important;
+    margin-bottom: 2rem;
+    border-radius: 1rem !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body {
+    padding: 0.85rem 0.15rem 0.35rem !important;
+}
+
+.card-text {
+    font-weight: 500 !important;
+    color: #111827;
+    text-decoration: none !important;
+}
+
+.listing-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+/* Filters */
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.explore-hero {
+    margin-top: 0.75rem;
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e5e7eb;
+}
+
+.explore-hero h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #111827;
+}
+
+.explore-hero p {
+    margin: 0.35rem 0 0;
+    color: #4b5563;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.25rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    font-size: 0.9rem;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+.filter-chip i {
+    margin-right: 0.35rem;
+}
+
+.filter-chip:hover {
+    border-color: #9ca3af;
+    color: #111827;
+}
+
+.active-filter {
+    background: #111827;
+    border-color: #111827;
+    color: #f9fafb !important;
+}
+
+.empty-explore-state {
+    text-align: center;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 1rem;
+    padding: 2rem 1rem;
+}
+
+.empty-explore-state h4 {
+    margin-bottom: 0.35rem;
+    color: #111827;
+}
+
+.empty-explore-state p {
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+/* Show page */
+.show-img {
+    width: 100% !important;
+    height: 18rem !important;
+}
+
+.show-card .card-body {
+    padding: 1rem !important;
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.7rem;
+}
+
+.show-btn {
+    min-width: 6.3rem;
+}
+
+/* Forms */
+.form-control {
+    border-radius: 0.75rem !important;
+    border-color: #d1d5db !important;
+}
+
+.form-control:focus {
+    border-color: #111827 !important;
+    box-shadow: 0 0 0 0.2rem rgba(17, 24, 39, 0.12) !important;
+}
+
