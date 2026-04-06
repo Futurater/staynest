@@ -21,18 +21,22 @@ const userRoutes = require("./routes/user.js");
 const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/peppyz";
 const sessionSecret = process.env.SECRET || "mysupersecretcode";
 const isProduction = process.env.NODE_ENV === "production";
+let dbConnectPromise = null;
 
-main()
-  .then(() => {
-    console.log("connected to DB");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-async function main() {
-  await mongoose.connect(dbUrl);
+async function connectDB() {
+  if (mongoose.connection.readyState === 1) return;
+  if (mongoose.connection.readyState === 2 && dbConnectPromise) {
+    await dbConnectPromise;
+    return;
+  }
+  dbConnectPromise = mongoose.connect(dbUrl);
+  await dbConnectPromise;
+  console.log("connected to DB");
 }
+
+connectDB().catch((err) => {
+  console.log("DB connection error:", err.message);
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -68,6 +72,15 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.currentUser = req.user;
   next();
+});
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(new ExpressError(500, "Database connection failed"));
+  }
 });
 
 app.use("/listings", listings);
