@@ -17,3 +17,22 @@
     });
   }, false);
 })();
+
+// Toggle Filters
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleBtn = document.getElementById('toggleFiltersBtn');
+  const filtersDiv = document.getElementById('filters');
+
+  if (toggleBtn && filtersDiv) {
+    toggleBtn.addEventListener('click', function() {
+      filtersDiv.classList.toggle('filters-hidden');
+      
+      if (filtersDiv.classList.contains('filters-hidden')) {
+        toggleBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Show Filters';
+      } else {
+        toggleBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Hide Filters';
+      }
+    });
+  }
+});
+

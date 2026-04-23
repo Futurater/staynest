@@ -9,6 +9,7 @@ module.exports.createReview = async (req, res) => {
   }
 
   const newReview = new Review(req.body.review);
+  newReview.owner = req.user._id;
   listing.reviews.push(newReview);
 
   await newReview.save();

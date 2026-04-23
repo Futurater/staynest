@@ -21,6 +21,7 @@ const validateReview = (req,res,next) => {
 router.post("/", isLoggedIn, validateReview, wrapAsync(reviewController.createReview));
 
 //DELETE
-router.delete("/:reviewId", isLoggedIn, wrapAsync(reviewController.deleteReview));
+const isReviewOwner = require("../utils/isReviewOwner.js");
+router.delete("/:reviewId", isLoggedIn, isReviewOwner, wrapAsync(reviewController.deleteReview));
 
 module.exports=router;

@@ -41,6 +41,7 @@ connectDB().catch((err) => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodoverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
@@ -83,9 +84,86 @@ app.use(async (req, res, next) => {
   }
 });
 
+// AI Chat endpoint for Gemini API (MUST be before routes)
+app.post("/api/ai-chat", async (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    if (!geminiApiKey || geminiApiKey === "your_gemini_api_key_here") {
+      // Fallback to local AI if API key not set
+      const response = await generateLocalResponse(message);
+      return res.json({ response });
+    }
+
+    // Call Gemini API with 2.5 Flash Lite model
+    const fetch = (await import("node-fetch")).default;
+    const geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + geminiApiKey, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `You are a helpful AI assistant for StayNest, a property rental platform. Provide helpful, concise responses (2-3 sentences). Context: ${message}. Give specific suggestions related to StayNest listings or features.`
+          }]
+        }]
+      })
+    });
+
+    if (!geminiResponse.ok) {
+      const fallback = await generateLocalResponse(message);
+      return res.json({ response: fallback });
+    }
+
+    const data = await geminiResponse.json();
+    const response = data.candidates[0]?.content?.parts[0]?.text || "I'm here to help! Ask me about finding stays, categories, or creating listings.";
+    res.json({ response });
+  } catch (error) {
+    console.error("AI Chat error:", error);
+    const fallback = await generateLocalResponse(req.body.message);
+    res.json({ response: fallback });
+  }
+});
+
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 app.use("/", userRoutes);
+
+// Local AI response generator (fallback)
+async function generateLocalResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  if (lowerMessage.includes("beach") || lowerMessage.includes("ocean")) {
+    return "🏖️ Looking for beachfront paradise? Check out our Beachfront category! You'll find stunning ocean-view properties perfect for a relaxing getaway.";
+  } else if (lowerMessage.includes("mountain") || lowerMessage.includes("cabin")) {
+    return "⛰️ Mountain lovers unite! Explore our Cabins, Arctic, and Countryside categories for cozy retreats surrounded by nature.";
+  } else if (lowerMessage.includes("luxury") || lowerMessage.includes("expensive")) {
+    return "✨ Ready for the finer things? Our Luxury category features premium stays with world-class amenities and stunning views.";
+  } else if (lowerMessage.includes("budget") || lowerMessage.includes("cheap") || lowerMessage.includes("affordable")) {
+    return "💰 Smart shopping! Filter by price to find amazing stays that won't break the bank. Quality experiences at great prices!";
+  } else if (lowerMessage.includes("pet") || lowerMessage.includes("dog") || lowerMessage.includes("cat")) {
+    return "🐕 Traveling with furry friends? You can add pet policies in listing descriptions. Check individual property details for pet-friendly options!";
+  } else if (lowerMessage.includes("how to") || lowerMessage.includes("create") || lowerMessage.includes("list")) {
+    return "📝 Ready to list your property? Click 'New Home' in the navigation to create your first listing. Add photos, description, and pricing!";
+  } else if (lowerMessage.includes("review") || lowerMessage.includes("rating")) {
+    return "⭐ Reviews help travelers make great decisions! Leave detailed reviews to help the community find amazing stays. You can rate 1-5 stars.";
+  } else if (lowerMessage.includes("trending") || lowerMessage.includes("popular")) {
+    return "🔥 Check out our Trending category to see what's hot right now! Updated regularly with the most popular stays.";
+  } else if (lowerMessage.includes("city") || lowerMessage.includes("urban")) {
+    return "🏙️ Urban explorer? Our City category has stylish apartments and modern lofts in vibrant downtown locations!";
+  } else {
+    const responses = [
+      "💡 That's an interesting question! Try filtering by category to find exactly what you're looking for.",
+      "🤔 I can help with finding stays, explaining categories, or answering questions about StayNest!",
+      "✨ Great question! Browse our listings or let me know if you'd like specific recommendations.",
+      "🎯 I'm here to help! What would you like to know about StayNest?"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+}
 
 // if user types a route which is not defined
 app.use((req, res, next) => {

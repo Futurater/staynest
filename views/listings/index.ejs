@@ -30,7 +30,12 @@
             <p>Discover weekend cabins, beach homes, and stylish city stays.</p>
         </section>
 
-        <div id="filters">
+        <button id="toggleFiltersBtn" class="toggle-filters-btn">
+            <i class="fa-solid fa-sliders"></i>
+            Show Filters
+        </button>
+
+        <div id="filters" class="filters-hidden">
             <a class="filter-chip <%= selectedCategorySafe ? '' : 'active-filter' %>" href="/listings">
                 <i class="fa-solid fa-border-all"></i>
                 All

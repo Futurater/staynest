@@ -8,7 +8,7 @@ module.exports.postSignup = async (req, res, next) => {
 
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      req.flash("success", "Welcome to Kittys!");
+      req.flash("success", "Welcome to StayNest!");
       res.redirect("/listings");
     });
   } catch (e) {
@@ -18,7 +18,7 @@ module.exports.postSignup = async (req, res, next) => {
 };
 
 module.exports.postLogin = async (req, res) => {
-  req.flash("success", "Welcome to Kittys! You are logged in.");
+  req.flash("success", "Welcome to StayNest! You are logged in.");
   res.redirect("/listings");
 };
 

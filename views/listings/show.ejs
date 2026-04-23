@@ -52,13 +52,16 @@
             <h6 class="card-subtitle mb-2 text-muted">
                Rating: <%= review.rating %> / 5
             </h6>
+            <p class="card-text"><small><strong>By <%= review.owner ? review.owner.username || review.owner.email || "User" : "Anonymous" %></strong></small></p>
             <p class="card-text"><%= review.comment %></p>
-            <p class="text-end text-secondary small mb-0">
+            <p class="text-end text-secondary small mb-2">
               Posted on <%= new Date(review.createdAt).toLocaleDateString() %>
             </p>
-            <form class="mb-3" method="POST" action="/listings/<%= listing._id%>/reviews/<%=review._id%>?_method=DELETE">
-            <button class="btn btn-sm btn-dark">Delete</button>
-            </form>
+            <% if (review.owner && currentUser && review.owner._id.toString() === currentUser._id.toString()) { %>
+              <form class="mb-0" method="POST" action="/listings/<%= listing._id%>/reviews/<%=review._id%>?_method=DELETE">
+                <button class="btn btn-sm btn-dark">Delete</button>
+              </form>
+            <% } %>
           </div>
         </div>
       </div>
