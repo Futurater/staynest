@@ -128,6 +128,42 @@ app.post("/api/ai-chat", async (req, res) => {
   }
 });
 
+// Seed API endpoint - Populate database with sample listings
+app.get("/api/seed", async (req, res) => {
+  try {
+    await connectDB();
+    
+    // Import seed data
+    const initData = require("./init/data.js");
+    const Listing = require("./models/listings.js");
+    
+    // Clear existing listings
+    await Listing.deleteMany({});
+    console.log("Cleared existing listings");
+    
+    // Insert seed data
+    await Listing.insertMany(initData.data);
+    console.log("Database seeded successfully");
+    
+    res.json({
+      success: true,
+      message: "Database seeded with " + initData.data.length + " listings!",
+      count: initData.data.length
+    });
+  } catch (error) {
+    console.error("Seed error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Redirect root to listings
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
+
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 app.use("/", userRoutes);
