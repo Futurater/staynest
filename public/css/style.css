@@ -503,15 +503,125 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
 }
 
+/* Mobile Navigation & Responsive Drawer */
+.mobile-drawer-item {
+  display: none;
+}
+
 @media (max-width: 991px) {
   .nav-telemetry-strip {
     display: none;
   }
+
   .nav-menu-links {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(250, 248, 245, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 2px solid var(--ink-primary);
+    padding: 1.5rem 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    z-index: 999;
   }
-  .mobile-nav-toggle {
+
+  .nav-menu-links.mobile-open {
+    display: flex !important;
+    animation: slideDownMenu 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideDownMenu {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-menu-links li {
+    width: 100%;
+    list-style: none;
+  }
+
+  .nav-menu-links .nav-roll-link {
     display: block;
+    padding: 0.65rem 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .mobile-drawer-item {
+    display: block !important;
+    padding-top: 0.5rem;
+  }
+
+  .mobile-auth-buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .mobile-user-profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+  }
+
+  .mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    font-size: 1.1rem;
+  }
+
+  .desktop-only-auth,
+  .desktop-only-user .user-pill-name,
+  .desktop-only-user a {
+    display: none !important;
+  }
+
+  .desktop-only-user {
+    padding: 0.25rem;
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-create-btn .btn-kinetic-label-wrap {
+    display: none !important;
+  }
+
+  .nav-create-btn {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .nav-create-btn .btn-kinetic-icon {
+    width: 100%;
+    border-right: none;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+
+  .brand-title {
+    font-size: 1.2rem;
+  }
+
+  .nav-actions {
+    gap: 0.5rem;
   }
 }
 
@@ -591,6 +701,44 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
   letter-spacing: 0.05em;
   margin-top: 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .editorial-hero {
+    padding: 1.75rem 0 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-main-title {
+    font-size: clamp(1.85rem, 8.5vw, 2.35rem);
+    line-height: 1.08;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .telemetry-ticker-bar {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+    padding: 0.85rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .ticker-item {
+    padding-left: 0.6rem;
+  }
+
+  .ticker-value {
+    font-size: 1.25rem;
+  }
+
+  .ticker-label {
+    font-size: 0.65rem;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -728,7 +876,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.7rem;
 }
 
-/* Taxes & Fees Switch Toggle */
 .tax-toggle-wrapper {
   display: flex;
   align-items: center;
@@ -742,6 +889,32 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   color: var(--ink-secondary);
   white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .category-filter-strip {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .tax-toggle-wrapper {
+    width: 100%;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  .category-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+  }
+
+  .category-pill {
+    flex-shrink: 0;
+  }
 }
 
 .switch-control {
@@ -784,6 +957,20 @@ input:checked + .switch-slider {
 
 input:checked + .switch-slider:before {
   transform: translateX(16px);
+}
+
+@media (max-width: 640px) {
+  .spatial-match-input-wrap {
+    flex-direction: column !important;
+  }
+  .spatial-match-input-wrap input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .spatial-match-input-wrap button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1046,6 +1233,33 @@ body.show-tax-totals .price-total-hint {
   color: var(--ink-secondary);
 }
 
+@media (max-width: 640px) {
+  .showcase-title {
+    font-size: clamp(1.65rem, 7vw, 2.1rem) !important;
+    line-height: 1.12 !important;
+  }
+
+  .showcase-location-bar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.76rem;
+  }
+
+  .showcase-location-bar .separator-dot {
+    display: none;
+  }
+
+  .showcase-location-bar span:not(.separator-dot) {
+    background: var(--canvas-surface-secondary);
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-hairline);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+}
+
 /* Hero Showcase Imagery */
 .showcase-gallery-hero {
   position: relative;
@@ -1214,7 +1428,6 @@ body.show-tax-totals .price-total-hint {
   font-weight: bold;
 }
 
-/* Sticky Booking Concierge Card */
 .sticky-concierge-card {
   position: sticky;
   top: 90px;
@@ -1223,6 +1436,59 @@ body.show-tax-totals .price-total-hint {
   border-radius: var(--radius-sm);
   padding: 1.75rem;
   box-shadow: var(--shadow-hover);
+}
+
+@media (max-width: 991px) {
+  .sticky-concierge-card {
+    position: static !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .editorial-section-card {
+    padding: 1.25rem !important;
+  }
+
+  .specs-matrix-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+
+  .spec-matrix-item {
+    padding: 0.65rem 0.75rem !important;
+  }
+
+  .spec-matrix-label {
+    font-size: 0.62rem !important;
+  }
+
+  .spec-matrix-value {
+    font-size: 0.95rem !important;
+  }
+
+  .amenities-blueprint-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+
+  .amenity-chip {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.82rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .host-dossier-card {
+    padding: 1rem !important;
+    gap: 0.85rem !important;
+  }
+
+  .sticky-concierge-card {
+    padding: 1.25rem !important;
+  }
+
+  .concierge-big-rate {
+    font-size: 1.5rem !important;
+  }
 }
 
 .concierge-price-header {
@@ -1675,6 +1941,25 @@ body.show-tax-totals .price-total-hint {
   overflow: hidden;
   transform-origin: bottom right;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .ai-chat-toggle {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.15rem !important;
+  }
+
+  .ai-chat-widget {
+    right: 12px !important;
+    bottom: 68px !important;
+    width: calc(100vw - 24px) !important;
+    max-width: 360px !important;
+    height: calc(100vh - 90px) !important;
+    max-height: 480px !important;
+  }
 }
 
 .ai-chat-header {

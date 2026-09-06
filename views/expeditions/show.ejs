@@ -19,9 +19,9 @@
 
   <div class="showcase-location-bar">
     <span><i class="fa-solid fa-route" style="color: var(--brand-cobalt);"></i> <%= expedition.total_distance_km %> Total Kilometers</span>
-    <span>•</span>
+    <span class="separator-dot">•</span>
     <span><i class="fa-solid fa-calendar-days"></i> <%= expedition.duration_days %> Days / <%= expedition.duration_days %> Nights</span>
-    <span>•</span>
+    <span class="separator-dot">•</span>
     <span><%= expedition.legs ? expedition.legs.length : 3 %> Curated Sanctuaries</span>
   </div>
 </div>

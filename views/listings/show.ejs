@@ -33,9 +33,9 @@
 
   <div class="showcase-location-bar">
     <span><i class="fa-solid fa-location-dot" style="color: var(--brand-coral);"></i> <%= listing.location %>, <%= listing.country %></span>
-    <span>•</span>
+    <span class="separator-dot">•</span>
     <span><i class="fa-solid fa-star" style="color: #F59E0B;"></i> <%= avgRating %> (<%= reviewCount %> Review<%= reviewCount !== 1 ? 's' : '' %>)</span>
-    <span>•</span>
+    <span class="separator-dot">•</span>
     <span>Managed by <strong><%= listing.owner ? listing.owner.username || "Architectural Custodian" : "Verified Host" %></strong></span>
   </div>
 </div>

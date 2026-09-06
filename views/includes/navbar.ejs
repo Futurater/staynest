@@ -30,50 +30,77 @@
         </div>
       </a>
 
-      <!-- Center Editorial Navigation Links -->
+      <!-- Center Editorial Navigation Links (Desktop & Mobile Drawer) -->
       <ul class="nav-menu-links">
         <li><a href="/listings" class="nav-roll-link">Explore Havens</a></li>
         <li><a href="/expeditions" class="nav-roll-link">Expeditions</a></li>
         <li><a href="/listings?category=Cabins" class="nav-roll-link">Minimalist Cabins</a></li>
         <li><a href="/listings?category=Luxury" class="nav-roll-link">Pavilions & Villas</a></li>
+        
+        <!-- Mobile Drawer Extras -->
+        <li class="mobile-drawer-item">
+          <% if(!currentUser) { %>
+            <div class="mobile-auth-buttons">
+              <a href="/login" class="btn-blueprint" style="flex: 1; text-align: center; justify-content: center;">Sign In</a>
+              <a href="/signup" class="btn-blueprint" style="flex: 1; text-align: center; justify-content: center; background: var(--ink-primary); color: #fff !important;">Register</a>
+            </div>
+          <% } else { %>
+            <div class="mobile-user-profile">
+              <div class="nav-user-pill" style="border: none; padding: 0;">
+                <div class="nav-user-avatar">
+                  <%= currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U' %>
+                </div>
+                <span style="font-weight: 700; margin-left: 0.5rem;"><%= currentUser.username %></span>
+              </div>
+              <a href="/logout" class="btn-blueprint" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+              </a>
+            </div>
+          <% } %>
+          <div style="margin-top: 0.85rem;">
+            <a href="/listings/new" class="btn-blueprint" style="width: 100%; justify-content: center; background: var(--canvas-surface-dark); color: #fff !important;">
+              <i class="fa-solid fa-plus"></i> List a Sanctuary
+            </a>
+          </div>
+        </li>
       </ul>
 
       <!-- Right Actions -->
       <div class="nav-actions">
         <% if(!currentUser) { %>
-          <a href="/login" class="nav-roll-link" style="margin-right: 0.5rem;">Sign In</a>
-          <a href="/signup" class="nav-roll-link" style="margin-right: 0.85rem;">Register</a>
-          <% } else { %>
-            <div class="nav-user-pill">
-              <div class="nav-user-avatar">
-                <%= currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U' %>
-              </div>
-              <span>
-                <%= currentUser.username %>
-              </span>
-              <a href="/logout" title="Log Out" style="color: var(--ink-muted); margin-left: 0.25rem;">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              </a>
+          <a href="/login" class="nav-roll-link desktop-only-auth" style="margin-right: 0.5rem;">Sign In</a>
+          <a href="/signup" class="nav-roll-link desktop-only-auth" style="margin-right: 0.85rem;">Register</a>
+        <% } else { %>
+          <div class="nav-user-pill desktop-only-user">
+            <div class="nav-user-avatar">
+              <%= currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U' %>
             </div>
-            <% } %>
+            <span class="user-pill-name">
+              <%= currentUser.username %>
+            </span>
+            <a href="/logout" title="Log Out" style="color: var(--ink-muted); margin-left: 0.25rem;">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </a>
+          </div>
+        <% } %>
 
-              <!-- Kinetic Button for Listing Creation -->
-              <a href="/listings/new" class="btn-kinetic">
-                <div class="btn-kinetic-icon">
-                  <i class="fa-solid fa-plus"></i>
-                </div>
-                <div class="btn-kinetic-label-wrap">
-                  <div class="btn-kinetic-roll">
-                    <span>List a Sanctuary</span>
-                    <span>List a Sanctuary</span>
-                  </div>
-                </div>
-              </a>
+        <!-- Kinetic Button for Listing Creation (Icon on mobile, full on desktop) -->
+        <a href="/listings/new" class="btn-kinetic nav-create-btn" title="List a Sanctuary">
+          <div class="btn-kinetic-icon">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+          <div class="btn-kinetic-label-wrap">
+            <div class="btn-kinetic-roll">
+              <span>List a Sanctuary</span>
+              <span>List a Sanctuary</span>
+            </div>
+          </div>
+        </a>
 
-              <!-- Mobile Menu Toggle -->
-              <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
-                <i class="fa-solid fa-bars"></i>
-              </button>
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
     </nav>
   </div>

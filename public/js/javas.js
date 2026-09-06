@@ -403,5 +403,38 @@
         });
       });
     }
+
+    // 08. Mobile Navigation Drawer Toggle
+    const mobileNavToggle = document.getElementById('mobileNavToggle');
+    const navMenuLinks = document.querySelector('.nav-menu-links');
+    if (mobileNavToggle && navMenuLinks) {
+      mobileNavToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = navMenuLinks.classList.toggle('mobile-open');
+        const icon = mobileNavToggle.querySelector('i');
+        if (icon) {
+          if (isOpen) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+          } else {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+          }
+        }
+      });
+
+      // Close drawer when clicking outside
+      document.addEventListener('click', function(e) {
+        if (navMenuLinks.classList.contains('mobile-open') && !navMenuLinks.contains(e.target) && !mobileNavToggle.contains(e.target)) {
+          navMenuLinks.classList.remove('mobile-open');
+          const icon = mobileNavToggle.querySelector('i');
+          if (icon) {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+          }
+        }
+      });
+    }
   });
 })();
+
