@@ -1,20 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
-const CATEGORIES = [
-  "Trending",
-  "Rooms",
-  "Beachfront",
-  "Cabins",
-  "Castles",
-  "Camping",
-  "Arctic",
-  "Pools",
-  "Countryside",
-  "Luxury",
-  "City",
-  "Farms",
-];
+const { CATEGORY_LABELS } = require("../utils/categories.js");
 
 const listingSchema = new Schema({
   title: {
@@ -39,7 +26,7 @@ const listingSchema = new Schema({
   },
   category: {
     type: String,
-    enum: CATEGORIES,
+    enum: CATEGORY_LABELS,
     default: "Trending",
   },
   price: Number,
@@ -61,23 +48,6 @@ listingSchema.post("findOneAndDelete", async (listing) => {
   }
 });
 
-// schema.js
-// const Joi = require("joi");
-
-// module.exports.listingSchema = Joi.object({
-//   listing: Joi.object({
-//     title: Joi.string().required(),
-//     description: Joi.string().allow(""),
-//     price: Joi.number().required().min(0),
-//     location: Joi.string().required(),
-//     country: Joi.string().required(),
-//     image: Joi.object({
-//       url: Joi.string().uri().allow(""),
-//       filename: Joi.string().allow(""),
-//     }).optional(),
-//   }).required(),
-// });
-
 const Listing = mongoose.model("Listing", listingSchema);
-module.exports = Listing; 
-// 
+module.exports = Listing;
+

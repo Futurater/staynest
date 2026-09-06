@@ -1,43 +1,71 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-  <h2 class="col-6 offset-3">Sign Up on StayNest</h2>
-  <div class="col-6 offset-3">
+<div class="auth-split-wrapper">
+  <!-- Left Editorial Branding Pane -->
+  <div class="auth-brand-pane">
+    <div>
+      <div class="badge-architectural badge-coral" style="margin-bottom: 1.5rem;">CUSTODIAN REGISTRATION</div>
+      <div class="brand-title" style="color: #fff; font-size: 2rem; margin-bottom: 0.5rem;">StayNest</div>
+      <div class="mono-stamp" style="color: #94A3B8;">ARCHITECTURAL HAVENS & SANCTUARIES</div>
+    </div>
+
+    <div style="margin: 3rem 0;">
+      <blockquote style="font-family: var(--font-display); font-size: 1.35rem; line-height: 1.4; color: #E2E8F0; margin: 0; font-style: italic;">
+        "Simplicity is about subtracting the obvious and adding the meaningful."
+      </blockquote>
+      <div class="mono-stamp" style="color: var(--brand-cobalt); margin-top: 0.75rem;">— JOHN MAEDA</div>
+    </div>
+
+    <div class="mono-stamp" style="color: #64748B; font-size: 0.7rem;">
+      GLOBAL ARCHIVE ACCESS • VERIFIED COMMUNITY
+    </div>
+  </div>
+
+  <!-- Right Form Pane -->
+  <div class="auth-form-pane">
+    <div style="margin-bottom: 2rem;">
+      <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.35rem;">Create Account</h2>
+      <p style="color: var(--ink-secondary); font-size: 0.95rem;">
+        Join StayNest to reserve rare spaces or commission your own retreats to our global archive.
+      </p>
+    </div>
+
     <form action="/signup" method="POST" class="needs-validation" novalidate>
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input
-          name="username"
-          id="username"
-          type="text"
-          class="form-control"
-          required
-        />
-        <div class="valid-feedback">Looks good!</div>
+        <input name="username" id="username" type="text" class="form-control" placeholder="Choose an archive username" required autocomplete="username">
+        <div class="valid-feedback">Looks good.</div>
+        <div class="invalid-feedback">Please choose a valid username.</div>
       </div>
+
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-          name="email"
-          id="email"
-          type="email"
-          class="form-control"
-          required
-        />
-   
+        <label for="email" class="form-label">Email Address</label>
+        <input name="email" id="email" type="email" class="form-control" placeholder="name@domain.com" required autocomplete="email">
+        <div class="invalid-feedback">Please enter a valid email.</div>
       </div>
-      <div class="mb-3">
+
+      <div class="mb-4">
         <label for="password" class="form-label">Password</label>
-        <input
-          name="password"
-          id="password"
-          type="password"
-          class="form-control"
-          required
-        />
-      
+        <input name="password" id="password" type="password" class="form-control" placeholder="Minimum 6 characters" required autocomplete="new-password">
+        <div class="invalid-feedback">Please provide a secure password.</div>
       </div>
-      <button class="btn btn-dark">Sign Up</button>
+
+      <button type="submit" class="btn-kinetic" style="width: 100%;">
+        <div class="btn-kinetic-icon">
+          <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div class="btn-kinetic-label-wrap" style="width: 100%; justify-content: center;">
+          <div class="btn-kinetic-roll" style="width: 100%; text-align: center;">
+            <span>Create Sanctuary Profile</span>
+            <span>Create Sanctuary Profile</span>
+          </div>
+        </div>
+      </button>
+
+      <div style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem; color: var(--ink-muted);">
+        Already a registered member? 
+        <a href="/login" style="color: var(--brand-cobalt); font-weight: 600;">Sign in here</a>
+      </div>
     </form>
   </div>
 </div>

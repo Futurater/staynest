@@ -1,0 +1,94 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="editorial-hero">
+    <div class="hero-eyebrow">
+        <span class="badge-architectural badge-coral">MULTI-LEG EXPEDITIONS</span>
+        <span class="mono-stamp">• SYNCHRONIZED ROUTE ITINERARY</span>
+    </div>
+    <h1 class="hero-main-title">
+        Multi-Stop <span class="highlight-cobalt">Architectural Expeditions</span>.
+    </h1>
+    <p class="hero-subtitle">
+        Curated journeys uniting multiple architect-designed sanctuaries into a single synchronized road trip. Verified transit times, scenic coastal crossings, and single-click checkout with a 15% bundle savings.
+    </p>
+
+    <div class="telemetry-ticker-bar">
+        <div class="ticker-item">
+            <span class="ticker-value">2 - 4</span>
+            <span class="ticker-label">Sanctuaries Per Tour</span>
+        </div>
+        <div class="ticker-item">
+            <span class="ticker-value">15%</span>
+            <span class="ticker-label">Expedition Bundle Discount</span>
+        </div>
+        <div class="ticker-item">
+            <span class="ticker-value">ATOMIC</span>
+            <span class="ticker-label">Instant Multi-Leg Confirmation</span>
+        </div>
+        <div class="ticker-item">
+            <span class="ticker-value">100%</span>
+            <span class="ticker-label">Zero Double-Booking Guarantee</span>
+        </div>
+    </div>
+</section>
+
+<!-- Expeditions Catalog Grid -->
+<div class="listings-masonry" style="margin-top: 2rem;">
+    <% for(let exp of expeditions) { %>
+        <article class="sanctuary-card">
+            <a href="/expeditions/<%= exp.slug %>" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="card-media-wrapper">
+                    <img src="<%= exp.cover_image %>" class="card-media-img" alt="<%= exp.title %>" loading="lazy">
+                    
+                    <div class="card-stamp-top-left">
+                        <span class="badge-architectural badge-coral">
+                            <%= exp.duration_days %> DAYS • <%= exp.total_distance_km %> KM
+                        </span>
+                    </div>
+
+                    <div class="card-stamp-top-right">
+                        <span class="badge-architectural badge-cobalt">
+                            SAVE <%= exp.discount_pct %>%
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-content-pane">
+                    <div class="card-header-row">
+                        <h3 class="sanctuary-title"><%= exp.title %></h3>
+                    </div>
+
+                    <div class="card-location-meta">
+                        <i class="fa-solid fa-route" style="color: var(--brand-cobalt);"></i>
+                        <span><%= exp.region %></span>
+                    </div>
+
+                    <p style="color: var(--ink-secondary); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
+                        <%= exp.tagline %>
+                    </p>
+
+                    <div class="card-specs-bar">
+                        <span><i class="fa-solid fa-calendar-days"></i> <%= exp.duration_days %> Days Total</span>
+                        <span>•</span>
+                        <span><i class="fa-solid fa-location-arrow"></i> <%= exp.total_distance_km %> KM Route</span>
+                    </div>
+
+                    <div class="card-footer-row">
+                        <div class="price-container">
+                            <span class="price-currency-rate">
+                                &#8377;<%= exp.bundle_price.toLocaleString("en-IN") %> <small>/ complete journey</small>
+                            </span>
+                            <span class="mono-stamp" style="color: var(--brand-coral); font-size: 0.7rem;">
+                                Includes all sanctuaries + transit guide
+                            </span>
+                        </div>
+
+                        <div class="card-action-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </article>
+    <% } %>
+</div>

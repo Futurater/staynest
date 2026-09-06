@@ -1,80 +1,400 @@
 <% layout("/layouts/boilerplate") %>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
-        <h3><%= listing.title %></h3>
-    </div>
-    <div class="card col-6 offset-2 show-card">
-        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
-        <div class="card-body">
-            <p class="card-text mb-2"><%= listing.description %></p>
-            <p class="card-text mb-1">&#8377; <%= listing.price %> / night</p>
-            <p class="card-text mb-1"><%= listing.location %>, <%= listing.country %></p>
-            <p class="card-text mb-0"><strong>Owner:</strong> <%= listing.owner ? listing.owner.username || listing.owner.email || "Owner" : "Unknown" %></p>
-            <% if (listing.owner && currentUser && listing.owner._id.toString() === currentUser._id.toString()) { %>
-                <div class="btns">
-                    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn show-btn">Edit</a>
-                    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-                        <button class="btn btn-dark show-btn">Delete</button>
-                    </form>
-                </div>
-            <% } %>
-        </div>
-    </div>
-    <div class="col-8 offset-2">
-        <hr>
-        <h4>Leave a review</h4>
-        <form action="/listings/<%=listing._id%>/reviews" method="POST" novalidate class="needs-validation">
-            <div class="mb-3 mt-3">
-                <label for="rating">rating</label>
-                <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range">
-            </div>
-            <div class="mb-3 mt-3">
-                <label for="comment">comment</label>
-                <textarea name="review[comment]" id="comment" cols="30" rows="5"
-                    class="form-control" required></textarea>
-                <div class="invalid-feedback">Please submit comments</div>
-            </div>
+<%
+  const rawPrice = Number(listing.price) || 1200;
+  const listingCategory = listing.category || "Trending";
+  const listingIdShort = listing._id ? listing._id.toString().slice(-6).toUpperCase() : "000000";
+  const reviewCount = listing.reviews ? listing.reviews.length : 0;
+  const avgRating = reviewCount > 0 ? (listing.reviews.reduce((sum, r) => sum + (r.rating || 5), 0) / reviewCount).toFixed(1) : "New";
+%>
 
-            <button class="btn btn-dark">Submit</button>
+<div class="sanctuary-showcase-header">
+  <div class="showcase-telemetry-row">
+    <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+      <span class="badge-architectural badge-cobalt"><%= listingCategory %></span>
+      <span class="badge-architectural badge-coral">VERIFIED RESIDENCE</span>
+      <span class="mono-stamp">[SPEC ID: SN-<%= listingIdShort %>]</span>
+    </div>
+
+    <% if (listing.owner && currentUser && listing.owner._id.toString() === currentUser._id.toString()) { %>
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="/listings/<%= listing._id %>/edit" class="btn-blueprint" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;">
+          <i class="fa-solid fa-pen-to-square"></i> Edit Specification
+        </a>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" onsubmit="return confirm('Confirm deletion of this architectural sanctuary?');">
+          <button class="btn-blueprint" style="padding: 0.4rem 0.9rem; font-size: 0.82rem; color: var(--brand-coral) !important; border-color: rgba(231,96,81,0.3);">
+            <i class="fa-solid fa-trash-can"></i> Decommission
+          </button>
         </form>
+      </div>
+    <% } %>
+  </div>
 
-        <hr />
-    <h4 class="mb-3">All Reviews</h4>
-<hr />
+  <h1 class="showcase-title"><%= listing.title %></h1>
 
+  <div class="showcase-location-bar">
+    <span><i class="fa-solid fa-location-dot" style="color: var(--brand-coral);"></i> <%= listing.location %>, <%= listing.country %></span>
+    <span>•</span>
+    <span><i class="fa-solid fa-star" style="color: #F59E0B;"></i> <%= avgRating %> (<%= reviewCount %> Review<%= reviewCount !== 1 ? 's' : '' %>)</span>
+    <span>•</span>
+    <span>Managed by <strong><%= listing.owner ? listing.owner.username || "Architectural Custodian" : "Verified Host" %></strong></span>
+  </div>
+</div>
 
-<div class="row">
-  <% if (listing.reviews && listing.reviews.length > 0) { %>
-    <% for (let review of listing.reviews) { %>
-      <div class="col-md-6 mb-3">
-        <div class="card shadow-sm border-0">
-          <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">
-               Rating: <%= review.rating %> / 5
-            </h6>
-            <p class="card-text"><small><strong>By <%= review.owner ? review.owner.username || review.owner.email || "User" : "Anonymous" %></strong></small></p>
-            <p class="card-text"><%= review.comment %></p>
-            <p class="text-end text-secondary small mb-2">
-              Posted on <%= new Date(review.createdAt).toLocaleDateString() %>
-            </p>
-            <% if (review.owner && currentUser && review.owner._id.toString() === currentUser._id.toString()) { %>
-              <form class="mb-0" method="POST" action="/listings/<%= listing._id%>/reviews/<%=review._id%>?_method=DELETE">
-                <button class="btn btn-sm btn-dark">Delete</button>
-              </form>
-            <% } %>
+<!-- Showcase Hero Image -->
+<div class="showcase-gallery-hero" style="margin-bottom: 2.5rem;">
+  <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470' %>" 
+       alt="<%= listing.title %>" 
+       loading="eager">
+  <div class="showcase-blueprint-watermark">
+    <i class="fa-solid fa-location-dot"></i> <%= (listing.location || '').toUpperCase() %>, <%= (listing.country || '').toUpperCase() %>
+  </div>
+</div>
+
+<!-- Two-Column Editorial Grid Layout -->
+<div class="showcase-grid-layout">
+  <!-- Left Column: Narrative, Technical Specs, Amenities, Reviews -->
+  <div class="showcase-details-column">
+    <!-- 01. Spatial Narrative -->
+    <div class="editorial-section-card">
+      <div class="section-eyebrow">
+        <i class="fa-solid fa-cube"></i> 01 / Spatial Philosophy & Narrative
+      </div>
+      <h2 class="section-heading">Designed for stillness and light.</h2>
+      <p class="architectural-narrative">
+        <%= listing.description %>
+      </p>
+
+      <!-- Technical Specification Matrix -->
+      <div class="specs-matrix-grid">
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Archive Reference</div>
+          <div class="spec-matrix-value">SN-<%= listingIdShort %></div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Design Category</div>
+          <div class="spec-matrix-value"><%= listingCategory %></div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Floor Area</div>
+          <div class="spec-matrix-value">~2,150 SQ.FT</div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Optimal Capacity</div>
+          <div class="spec-matrix-value">4 Guests</div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Check-in / Check-out</div>
+          <div class="spec-matrix-value">15:00 / 11:00</div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Integrity Index</div>
+          <div class="spec-matrix-value" style="color: #10B981;">99.4% Verified</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02. Curated Amenities & Creative Ateliers -->
+    <div class="editorial-section-card">
+      <div class="section-eyebrow">
+        <i class="fa-solid fa-layer-group"></i> 02 / Curated Amenities & Studio Ateliers
+      </div>
+      <h2 class="section-heading">Materiality and modern conveniences.</h2>
+      <div class="amenities-blueprint-grid">
+        <div class="amenity-chip">
+          <i class="fa-solid fa-maximize"></i>
+          <span>Panoramic Floor-to-Ceiling Glass</span>
+        </div>
+        <div class="amenity-chip">
+          <i class="fa-solid fa-temperature-arrow-up"></i>
+          <span>Radiant In-Floor Heating</span>
+        </div>
+        <div class="amenity-chip">
+          <i class="fa-solid fa-pen-ruler" style="color: var(--brand-coral);"></i>
+          <span>Architectural Drafting Station</span>
+        </div>
+        <div class="amenity-chip">
+          <i class="fa-solid fa-satellite-dish"></i>
+          <span>Starlink High-Speed Telemetry</span>
+        </div>
+        <div class="amenity-chip">
+          <i class="fa-solid fa-charging-station"></i>
+          <span>Level 2 EV Charging Station</span>
+        </div>
+        <div class="amenity-chip">
+          <i class="fa-solid fa-kitchen-set"></i>
+          <span>Minimalist Chef's Kitchen</span>
+        </div>
+      </div>
+
+      <!-- Host Dossier -->
+      <div class="host-dossier-card">
+        <div class="host-avatar-box">
+          <%= listing.owner && listing.owner.username ? listing.owner.username.charAt(0).toUpperCase() : 'A' %>
+        </div>
+        <div>
+          <div style="font-weight: 700; font-size: 1.05rem; color: var(--ink-primary);">
+            Hosted by <%= listing.owner ? listing.owner.username || "Architectural Custodian" : "Verified Custodian" %>
+          </div>
+          <div class="mono-stamp" style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 0.15rem;">
+            VERIFIED RESIDENTIAL CURATOR • RESPONDS WITHIN 15 MINUTES
           </div>
         </div>
       </div>
-    <% } %>
-  <% } else { %>
-    <div class="col-12">
-      <div class="alert alert-secondary" role="alert">
-        No reviews yet! Be the first to leave one.
+    </div>
+
+    <!-- 03. Reviews & Guest Scorecards -->
+    <div class="editorial-section-card">
+      <div class="section-eyebrow">
+        <i class="fa-solid fa-chart-simple"></i> 03 / Resident Scorecards & Evaluations
+      </div>
+      <h2 class="section-heading">Guest evaluations & spatial feedback.</h2>
+
+      <!-- Progress Matrix -->
+      <div class="reviews-scorecard-grid">
+        <div class="scorecard-item">
+          <div class="scorecard-label-row">
+            <span>Spatial Design & Proportions</span>
+            <span>4.9 / 5.0</span>
+          </div>
+          <div class="scorecard-progress-track">
+            <div class="scorecard-progress-fill" style="width: 98%;"></div>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <div class="scorecard-label-row">
+            <span>Cleanliness & Material Finish</span>
+            <span>5.0 / 5.0</span>
+          </div>
+          <div class="scorecard-progress-track">
+            <div class="scorecard-progress-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <div class="scorecard-label-row">
+            <span>Accuracy to Blueprint</span>
+            <span>4.9 / 5.0</span>
+          </div>
+          <div class="scorecard-progress-track">
+            <div class="scorecard-progress-fill" style="width: 98%;"></div>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <div class="scorecard-label-row">
+            <span>Seclusion & Environmental Silence</span>
+            <span>4.8 / 5.0</span>
+          </div>
+          <div class="scorecard-progress-track">
+            <div class="scorecard-progress-fill" style="width: 96%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Feed -->
+      <div class="reviews-feed">
+        <% if (listing.reviews && listing.reviews.length > 0) { %>
+          <% for (let review of listing.reviews) { %>
+            <div class="guest-review-card">
+              <div class="guest-review-header">
+                <div>
+                  <div style="font-weight: 700; color: var(--ink-primary);">
+                    <%= review.owner ? review.owner.username || "Verified Resident" : "Resident" %>
+                  </div>
+                  <div class="mono-stamp" style="font-size: 0.68rem;">
+                    <%= review.createdAt ? new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Verified Stay' %>
+                  </div>
+                </div>
+                <div style="color: #F59E0B; font-size: 0.85rem;">
+                  <% for(let i = 0; i < (review.rating || 5); i++) { %>★<% } %>
+                </div>
+              </div>
+              <p style="margin: 0.5rem 0 0.75rem; color: var(--ink-secondary); font-size: 0.95rem; line-height: 1.55;">
+                <%= review.comment %>
+              </p>
+              <% if (review.owner && currentUser && review.owner._id.toString() === currentUser._id.toString()) { %>
+                <form method="POST" action="/listings/<%= listing._id%>/reviews/<%= review._id %>?_method=DELETE" style="margin: 0;">
+                  <button type="submit" class="btn-blueprint" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; color: var(--brand-coral) !important;">
+                    <i class="fa-solid fa-trash"></i> Remove Evaluation
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          <% } %>
+        <% } else { %>
+          <div style="padding: 1.5rem; text-align: center; background: var(--canvas-surface-secondary); border-radius: var(--radius-xs); border: 1px dashed var(--border-medium); margin-bottom: 1.5rem;">
+            <p style="margin: 0; color: var(--ink-muted); font-size: 0.9rem;">
+              No evaluations recorded yet. Be the first resident to submit feedback for this sanctuary.
+            </p>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Add Evaluation Form -->
+      <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-hairline);">
+        <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">Submit Spatial Evaluation</h3>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+          <div style="margin-bottom: 1rem;">
+            <label class="form-label" for="rating">Rating (1 to 5 Stars)</label>
+            <input type="range" min="1" max="5" id="rating" name="review[rating]" value="5" class="form-control" style="cursor: pointer;" oninput="document.getElementById('ratingValueDisp').textContent = this.value + ' / 5 Stars'">
+            <div id="ratingValueDisp" class="mono-stamp" style="margin-top: 0.35rem; color: var(--brand-cobalt); font-weight: 600;">5 / 5 Stars</div>
+          </div>
+
+          <div style="margin-bottom: 1.25rem;">
+            <label class="form-label" for="comment">Evaluation Commentary</label>
+            <textarea name="review[comment]" id="comment" rows="4" class="form-control" placeholder="Describe the spatial experience, materials, lighting, and seclusion..." required></textarea>
+            <div class="invalid-feedback">Please share your evaluation comments.</div>
+          </div>
+
+          <button type="submit" class="btn-kinetic">
+            <div class="btn-kinetic-icon">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+            <div class="btn-kinetic-label-wrap">
+              <div class="btn-kinetic-roll">
+                <span>Submit Evaluation</span>
+                <span>Submit Evaluation</span>
+              </div>
+            </div>
+          </button>
+        </form>
       </div>
     </div>
-  <% } %>
+  </div>
+
+  <!-- Right Column: Sticky Reservation Concierge & Cultural Residency Grant -->
+  <div class="showcase-sidebar-column">
+    <div class="sticky-concierge-card">
+      <div class="concierge-price-header">
+        <div>
+          <span class="concierge-big-rate">&#8377;<%= rawPrice.toLocaleString("en-IN") %></span>
+          <span class="mono-stamp" style="font-size: 0.8rem; color: var(--ink-muted);">/ night</span>
+        </div>
+        <span class="badge-architectural badge-cobalt">Instant Reserve</span>
+      </div>
+
+      <!-- Date & Guest Input Box -->
+      <div class="concierge-form-box">
+        <div class="concierge-input-row">
+          <div class="concierge-input-group">
+            <label for="checkInDate">Arrival</label>
+            <input type="date" id="checkInDate">
+          </div>
+          <div class="concierge-input-group">
+            <label for="checkOutDate">Departure</label>
+            <input type="date" id="checkOutDate">
+          </div>
+        </div>
+        <div class="concierge-input-group">
+          <label for="guestCountSelect">Residents</label>
+          <select id="guestCountSelect">
+            <option value="1">1 Resident</option>
+            <option value="2" selected>2 Residents</option>
+            <option value="3">3 Residents</option>
+            <option value="4">4 Residents (Max)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Dynamic Price Calculation Breakdown -->
+      <ul class="price-breakdown-list" id="conciergeBreakdown">
+        <li class="breakdown-row">
+          <span>&#8377;<%= rawPrice.toLocaleString("en-IN") %> × <span id="nightCount">3</span> nights</span>
+          <span id="baseStayTotal">&#8377;<%= (rawPrice * 3).toLocaleString("en-IN") %></span>
+        </li>
+        <li class="breakdown-row">
+          <span>Sanitization & Material Care</span>
+          <span>&#8377;450</span>
+        </li>
+        <li class="breakdown-row">
+          <span>Architectural Preservation Levy (18%)</span>
+          <span id="taxLevyTotal">&#8377;<%= Math.round(rawPrice * 3 * 0.18).toLocaleString("en-IN") %></span>
+        </li>
+        <li class="breakdown-row total-row">
+          <span>Total Investment</span>
+          <span id="grandTotal">&#8377;<%= Math.round(rawPrice * 3 * 1.18 + 450).toLocaleString("en-IN") %></span>
+        </li>
+      </ul>
+
+      <!-- Kinetic Reserve Button -->
+      <button type="button" class="btn-kinetic" style="width: 100%;" id="btnReserveSanctuary" data-listing-title="<%= listing.title %>" data-price="<%= rawPrice %>">
+        <div class="btn-kinetic-icon">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="btn-kinetic-label-wrap" style="width: 100%; justify-content: center;">
+          <div class="btn-kinetic-roll" style="width: 100%; text-align: center;">
+            <span>Reserve Sanctuary</span>
+            <span>Reserve Sanctuary</span>
+          </div>
+        </div>
+      </button>
+
+      <!-- Cultural Residency Grant Button (Brick 5 preview) -->
+      <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--border-hairline); text-align: center;">
+        <button type="button" id="btnOpenResidencyModal" class="btn-blueprint" style="width: 100%; font-size: 0.8rem; justify-content: center; color: var(--brand-coral) !important; border-color: rgba(231,96,81,0.3);">
+          <i class="fa-solid fa-graduation-cap"></i> Apply for Cultural Residency Grant (-25%)
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-top: 1rem;">
+        <span class="mono-stamp" style="font-size: 0.68rem; color: var(--ink-muted);">
+          <i class="fa-solid fa-shield-halved"></i> DIRECT GUARANTEE • ENCRYPTED TRANSACTION
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- Cultural Residency Modal -->
+<div id="residencyModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem;">
+  <div style="background: var(--canvas-surface); border-radius: var(--radius-sm); max-width: 540px; width: 100%; padding: 2rem; border: 1px solid var(--border-medium); box-shadow: var(--shadow-dark); position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <span class="badge-architectural badge-coral">CULTURAL RESIDENCY GRANT PROGRAM</span>
+      <button type="button" onclick="document.getElementById('residencyModal').style.display='none'" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--ink-muted);">&times;</button>
+    </div>
 
-     </div>
+    <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">Residency Grant Application</h2>
+    <p style="color: var(--ink-secondary); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem;">
+      StayNest awards a subsidized 25% grant rate for authors, visual artists, and architects conducting focused research or creative works.
+    </p>
+
+    <form onsubmit="submitResidencyGrant(event, '<%= listing.title %>', <%= rawPrice %>)">
+      <div class="mb-3">
+        <label class="form-label">Creative Discipline</label>
+        <select id="residencyDiscipline" class="form-control" required>
+          <option value="Architecture & Spatial Design">Architecture & Spatial Design</option>
+          <option value="Literature & Creative Writing">Literature & Creative Writing</option>
+          <option value="Photography & Cinematography">Photography & Cinematography</option>
+          <option value="Acoustic & Sound Art">Acoustic & Sound Art</option>
+          <option value="Painting & Sculpture">Painting & Sculpture</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project Intent & Proposal (2-3 Sentences)</label>
+        <textarea id="residencyProposal" rows="3" class="form-control" placeholder="Describe the creative work or spatial research you plan to conduct at <%= listing.title %>..." required></textarea>
+      </div>
+
+      <div style="background: var(--canvas-surface-secondary); padding: 0.85rem; border-radius: var(--radius-xs); border: 1px solid var(--border-hairline); margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.85rem;">
+          <span>Standard Nightly Rate:</span>
+          <span>&#8377;<%= rawPrice.toLocaleString("en-IN") %></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.85rem; color: #10B981; font-weight: bold; margin-top: 0.25rem;">
+          <span>Subsidized Residency Rate (-25%):</span>
+          <span>&#8377;<%= Math.round(rawPrice * 0.75).toLocaleString("en-IN") %> / night</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-kinetic" style="width: 100%;">
+        <div class="btn-kinetic-icon">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="btn-kinetic-label-wrap" style="width: 100%; justify-content: center;">
+          <div class="btn-kinetic-roll" style="width: 100%; text-align: center;">
+            <span>Submit Fellowship Application</span>
+            <span>Submit Fellowship Application</span>
+          </div>
+        </div>
+      </button>
+    </form>
+  </div>
 </div>

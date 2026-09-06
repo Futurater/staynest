@@ -1,72 +1,111 @@
 <% layout("/layouts/boilerplate") %>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
-        <h3>Create a New Listing</h3>
-        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data ">
+
+<div class="editorial-form-wrapper">
+    <div style="margin-bottom: 2rem;">
+        <div class="badge-architectural badge-cobalt">COMMISSION NEW SANCTUARY</div>
+        <h1 style="font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 2.75rem); margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            List an Architectural Retreat
+        </h1>
+        <p style="color: var(--ink-secondary); font-size: 1.05rem;">
+            Submit your retreat's specifications, spatial narrative, and photography to the StayNest global archive.
+        </p>
+    </div>
+
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+        <!-- Step 01: Core Specifications -->
+        <div class="form-step-card">
+            <div class="form-step-badge">01 / CORE SPECIFICATION</div>
+            <h2 class="form-step-title">Design Identity & Category</h2>
+
             <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required>
-                <div class="valid-feedback">
-        Good one!!
-      </div>          
-      <div class="invalid-feedback">
-        Please Enter Title.
-      </div> 
+                <label for="title" class="form-label">Sanctuary Name / Title</label>
+                <input name="listing[title]" id="title" placeholder="e.g. The Monolith Pavilion, Nordic Cliff Retreat" type="text" class="form-control" required>
+                <div class="valid-feedback">Valid architectural designation.</div>
+                <div class="invalid-feedback">Please enter a descriptive title.</div>
             </div>
-            
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea name="listing[description]" class="form-control" placeholder="enter description" required></textarea>         
-      <div class="invalid-feedback">
-        Please Elaborate about your listing.
-      </div> 
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="category" class="form-label">Architectural Category</label>
+                    <select name="listing[category]" id="category" class="form-control" required>
+                        <% for (let cat of categories) { %>
+                            <option value="<%= cat %>"><%= cat %></option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="price" class="form-label">Nightly Rate (&#8377; INR)</label>
+                    <input name="listing[price]" id="price" placeholder="2400" type="number" min="0" class="form-control" required>
+                    <div class="invalid-feedback">Please enter a valid rate per night.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 02: Spatial Coordinates -->
+        <div class="form-step-card">
+            <div class="form-step-badge">02 / GEOGRAPHIC COORDINATES</div>
+            <h2 class="form-step-title">Location & Regional Context</h2>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="location" class="form-label">City / Region / District</label>
+                    <input name="listing[location]" id="location" placeholder="e.g. Tromsø, Kyoto, Sedona" type="text" class="form-control" required>
+                    <div class="invalid-feedback">Please provide the city or local region.</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="country" class="form-label">Country / Territory</label>
+                    <input name="listing[country]" id="country" placeholder="e.g. Norway, Japan, United States" type="text" class="form-control" required>
+                    <div class="invalid-feedback">Please provide the country.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 03: Narrative & Media -->
+        <div class="form-step-card">
+            <div class="form-step-badge">03 / ARCHITECTURAL NARRATIVE & MEDIA</div>
+            <h2 class="form-step-title">Philosophy & Photography</h2>
+
+            <div class="mb-4">
+                <label for="description" class="form-label">Spatial Narrative & Experience</label>
+                <textarea name="listing[description]" id="description" rows="5" class="form-control" placeholder="Describe the architectural intent, materiality, natural lighting, and surrounding terrain..." required></textarea>
+                <div class="invalid-feedback">Please provide an architectural narrative.</div>
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Upload image</label>
-                <input name="listing[image]" placeholder="Upload an image" type="file" class="form-control">
-            </div>
-            
-            <div class="row">
-                <div class="mb-3 col-md-4">
-                    <label for="price" class="form-label">Price</label>
-                    <input name="listing[price]" placeholder="1200" type="number" class="form-control" required>          
-      <div class="invalid-feedback">
-        Enter the price.
-      </div> 
-                </div>
-    
-                <div class="mb-3 col-md-8">
-                    <label for="country" class="form-label">Country</label>
-                    <input name="listing[country]" placeholder="India" type="text" class="form-control" required>
-                    <div class="valid-feedback">
-        Amazing Country.
-      </div>          
-      <div class="invalid-feedback">
-        Please Enter Country.
-      </div>                
+                <label for="image" class="form-label">Upload High-Resolution Imagery</label>
+                <div class="dropzone-upload-box" onclick="document.getElementById('image').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: var(--brand-cobalt); margin-bottom: 0.75rem;"></i>
+                    <div style="font-weight: 600; color: var(--ink-primary); margin-bottom: 0.25rem;">
+                        Click or drag architectural photography here
+                    </div>
+                    <div class="mono-stamp" style="font-size: 0.72rem;">
+                        JPG, PNG, OR WEBP • RECOMMENDED 2400 × 1600 PX
+                    </div>
+                    <input name="listing[image]" id="image" type="file" style="display: none;" onchange="document.getElementById('uploadFileName').textContent = this.files[0] ? 'Selected: ' + this.files[0].name : ''">
+                    <div id="uploadFileName" class="mono-stamp" style="margin-top: 0.5rem; color: var(--brand-cobalt); font-weight: bold;"></div>
                 </div>
             </div>
-            
-            <div class="mb-3">
-                <label for="location" class="form-label">Location</label>
-                <input name="listing[location]" placeholder="Jaipur, Rajasthan" type="text" class="form-control" required>
-                <div class="valid-feedback">
-       Beautiful Place!
-      </div>          
-      <div class="invalid-feedback">
-        Please enter the location.
-      </div> 
-            </div>
-            <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select name="listing[category]" id="category" class="form-control" required>
-                    <% for (let category of categories) { %>
-                        <option value="<%= category %>"><%= category %></option>
-                    <% } %>
-                </select>
-            </div>
-            <button class="btn btn-dark add-btn">Add</button>
-        </form>
-    </div>
+        </div>
+
+        <!-- Submission Controls -->
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="/listings" class="btn-blueprint">
+                <i class="fa-solid fa-arrow-left"></i> Return to Archive
+            </a>
+
+            <button type="submit" class="btn-kinetic">
+                <div class="btn-kinetic-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <div class="btn-kinetic-label-wrap">
+                    <div class="btn-kinetic-roll">
+                        <span>Publish to Archive</span>
+                        <span>Publish to Archive</span>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </form>
 </div>

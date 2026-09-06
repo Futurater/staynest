@@ -1,0 +1,185 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="sanctuary-showcase-header">
+  <div class="showcase-telemetry-row">
+    <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+      <span class="badge-architectural badge-coral">MULTI-LEG EXPEDITION</span>
+      <span class="badge-architectural badge-cobalt"><%= expedition.region %></span>
+      <span class="mono-stamp">[EXP-REF: EXP-00<%= expedition.id %>]</span>
+    </div>
+
+    <div>
+      <span class="badge-architectural" style="color: #10B981; border-color: rgba(16,185,129,0.3);">
+        <i class="fa-solid fa-lock"></i> SYNCHRONIZED RESERVATION GUARANTEE
+      </span>
+    </div>
+  </div>
+
+  <h1 class="showcase-title"><%= expedition.title %></h1>
+
+  <div class="showcase-location-bar">
+    <span><i class="fa-solid fa-route" style="color: var(--brand-cobalt);"></i> <%= expedition.total_distance_km %> Total Kilometers</span>
+    <span>•</span>
+    <span><i class="fa-solid fa-calendar-days"></i> <%= expedition.duration_days %> Days / <%= expedition.duration_days %> Nights</span>
+    <span>•</span>
+    <span><%= expedition.legs ? expedition.legs.length : 3 %> Curated Sanctuaries</span>
+  </div>
+</div>
+
+<!-- Expedition Hero Cover -->
+<div class="showcase-gallery-hero">
+  <img src="<%= expedition.cover_image %>" alt="<%= expedition.title %>" loading="eager">
+  <div class="showcase-blueprint-watermark">
+    <i class="fa-solid fa-route"></i> ROUTE TELEMETRY // <%= expedition.region.toUpperCase() %> [TRANSIT SYNCHRONIZATION: ACTIVE]
+  </div>
+</div>
+
+<!-- Two-Column Layout -->
+<div class="showcase-grid-layout">
+  <!-- Left: Narrative & Transit Timeline -->
+  <div class="showcase-details-column">
+    <div class="editorial-section-card">
+      <div class="section-eyebrow">
+        <i class="fa-solid fa-map-location-dot"></i> 01 / Expedition Blueprint & Narrative
+      </div>
+      <h2 class="section-heading">Every leg of the sanctuary journey.</h2>
+      <p class="architectural-narrative">
+        <%= expedition.description %>
+      </p>
+
+      <div class="specs-matrix-grid" style="margin-top: 1.5rem;">
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Total Duration</div>
+          <div class="spec-matrix-value"><%= expedition.duration_days %> Days</div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Total Distance</div>
+          <div class="spec-matrix-value"><%= expedition.total_distance_km %> KM</div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Route Sanctuaries</div>
+          <div class="spec-matrix-value"><%= expedition.legs ? expedition.legs.length : 3 %> Stays</div>
+        </div>
+        <div class="spec-matrix-item">
+          <div class="spec-matrix-label">Bundle Benefit</div>
+          <div class="spec-matrix-value" style="color: var(--brand-coral);">-<%= expedition.discount_pct %>% Savings</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step-by-step Route Telemetry Timeline (United Carriers inspired) -->
+    <div class="editorial-section-card">
+      <div class="section-eyebrow">
+        <i class="fa-solid fa-timeline"></i> 02 / Synchronized Transit Itinerary
+      </div>
+      <h2 class="section-heading">Curated stops & transit waypoints.</h2>
+
+      <div style="position: relative; padding-left: 1.5rem; border-left: 2px solid var(--border-medium); margin-top: 1.5rem;">
+        <% if(expedition.legs && expedition.legs.length > 0) { %>
+          <% expedition.legs.forEach((leg, index) => { %>
+            <div style="position: relative; margin-bottom: 2rem;">
+              <!-- Circle marker -->
+              <div style="position: absolute; left: -1.95rem; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--brand-cobalt); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--brand-cobalt);"></div>
+              
+              <div class="guest-review-card" style="background: var(--canvas-surface); border-color: var(--border-medium);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+                  <div>
+                    <span class="badge-architectural badge-cobalt">STOP 0<%= leg.leg_order %></span>
+                    <h3 style="font-size: 1.2rem; margin: 0.4rem 0 0.2rem; font-weight: 700;"><%= leg.sanctuary_name %></h3>
+                    <div class="card-location-meta" style="margin-bottom: 0.4rem;">
+                      <i class="fa-solid fa-location-dot"></i> <%= leg.location %> • <strong><%= leg.nights %> Nights Stay</strong>
+                    </div>
+                  </div>
+                  <span class="mono-stamp" style="color: var(--brand-coral); font-weight: 600;">LEG 0<%= leg.leg_order %> CONFIRMED</span>
+                </div>
+
+                <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-hairline); font-size: 0.88rem; color: var(--ink-secondary);">
+                  <i class="fa-solid fa-gem" style="color: var(--brand-cobalt); margin-right: 0.35rem;"></i>
+                  <strong>Architectural Highlight:</strong> <%= leg.architectural_highlight %>
+                </div>
+              </div>
+
+              <!-- Transit link to next stop -->
+              <% if(index < expedition.legs.length - 1) { %>
+                <div style="margin: 1rem 0 1rem 1rem; display: flex; align-items: center; gap: 0.65rem; color: var(--ink-muted); font-family: var(--font-mono); font-size: 0.78rem;">
+                  <i class="fa-solid fa-arrow-down" style="color: var(--brand-coral);"></i>
+                  <span class="badge-architectural" style="background: var(--canvas-surface);">
+                    <i class="fa-solid fa-compass"></i> <%= leg.transit_mode %>: ~<%= leg.transit_hours %> Hours Transit
+                  </span>
+                </div>
+              <% } %>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Sticky Expedition Reservation Concierge -->
+  <div class="showcase-sidebar-column">
+    <div class="sticky-concierge-card">
+      <div class="concierge-price-header">
+        <div>
+          <span class="concierge-big-rate">&#8377;<%= expedition.bundle_price.toLocaleString("en-IN") %></span>
+          <span class="mono-stamp" style="font-size: 0.75rem; color: var(--ink-muted);">/ whole expedition</span>
+        </div>
+        <span class="badge-architectural badge-coral">Save <%= expedition.discount_pct %>%</span>
+      </div>
+
+      <p style="color: var(--ink-secondary); font-size: 0.85rem; line-height: 1.45; margin-bottom: 1.25rem;">
+        Locks all <%= expedition.legs.length %> retreats across <%= expedition.duration_days %> days in a single synchronized reservation. Zero overlap risk.
+      </p>
+
+      <form action="/expeditions/<%= expedition.slug %>/book" method="POST">
+        <div class="concierge-form-box">
+          <div class="concierge-input-group" style="border-bottom: 1px solid var(--border-hairline);">
+            <label for="startDate">Expedition Start Date</label>
+            <input type="date" id="startDate" name="startDate" value="2026-10-20" required>
+          </div>
+          <div class="concierge-input-group">
+            <label for="travelerName">Lead Traveler Name</label>
+            <input type="text" id="travelerName" name="travelerName" placeholder="Elena Rostova" required>
+          </div>
+        </div>
+
+        <!-- Cost Breakdown -->
+        <ul class="price-breakdown-list">
+          <li class="breakdown-row">
+            <span>Synchronized Retreats (<%= expedition.duration_days %> Nights)</span>
+            <span>&#8377;<%= Math.round(expedition.bundle_price * 1.15).toLocaleString("en-IN") %></span>
+          </li>
+          <li class="breakdown-row" style="color: #10B981;">
+            <span>Multi-Leg Bundle Savings (-15%)</span>
+            <span>-&#8377;<%= Math.round(expedition.bundle_price * 0.15).toLocaleString("en-IN") %></span>
+          </li>
+          <li class="breakdown-row">
+            <span>Preservation Tax Levy (18%)</span>
+            <span>&#8377;<%= Math.round(expedition.bundle_price * 0.18).toLocaleString("en-IN") %></span>
+          </li>
+          <li class="breakdown-row total-row">
+            <span>Unified Total Investment</span>
+            <span>&#8377;<%= Math.round(expedition.bundle_price * 1.18).toLocaleString("en-IN") %></span>
+          </li>
+        </ul>
+
+        <button type="submit" class="btn-kinetic" style="width: 100%;">
+          <div class="btn-kinetic-icon">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div class="btn-kinetic-label-wrap" style="width: 100%; justify-content: center;">
+            <div class="btn-kinetic-roll" style="width: 100%; text-align: center;">
+              <span>Confirm Expedition Reservation</span>
+              <span>Confirm Expedition Reservation</span>
+            </div>
+          </div>
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1rem;">
+        <span class="mono-stamp" style="font-size: 0.68rem; color: var(--ink-muted);">
+          <i class="fa-solid fa-shield-halved"></i> SECURE ATOMIC RESERVATION GUARANTEE
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,58 +19,218 @@
         ];
 %>
 
+<!-- Editorial Hero Header (illoca / unitedcarriers inspired) -->
+<section class="editorial-hero">
+    <div class="hero-eyebrow">
+        <span class="badge-architectural badge-cobalt">01 / ARCHITECTURAL ARCHIVE</span>
+        <span class="mono-stamp">• EDITION 2026 // GLOBAL SANCTUARIES</span>
+    </div>
+    <h1 class="hero-main-title">
+        Spaces designed for <span class="highlight-cobalt">intentional living</span>.
+    </h1>
+    <p class="hero-subtitle">
+        Discover architect-commissioned retreats, brutalist pavilions, and secluded wilderness cabins across the globe. Each home verified for spatial harmony and material integrity.
+    </p>
 
-        <!-- <h3>Listings</h3> -->
-        <!-- <form method="GET" action="/listings/new">
-        <button>Add listing</button>
+    <!-- Telemetry & Credibility Ticker Bar (United Carriers style) -->
+    <div class="telemetry-ticker-bar">
+        <div class="ticker-item">
+            <span class="ticker-value">120+</span>
+            <span class="ticker-label">Architectural Havens</span>
+        </div>
+        <div class="ticker-item">
+            <span class="ticker-value">99.4%</span>
+            <span class="ticker-label">Host Integrity Score</span>
+        </div>
+        <div class="ticker-item">
+            <span class="ticker-value">15</span>
+            <span class="ticker-label">Global Coordinates</span>
+        </div>
+        <div class="ticker-item">
+            <span class="ticker-value">100%</span>
+            <span class="ticker-label">Verified Photography</span>
+        </div>
+    </div>
+</section>
+
+<!-- Discovery Console: Instant Search, Category Index & Tax Toggle -->
+<section class="discovery-console">
+    <!-- Live Multi-Criteria Search Grid -->
+    <form class="search-form-grid" onsubmit="event.preventDefault();">
+        <div class="search-field">
+            <label for="liveSearchInput"><i class="fa-solid fa-magnifying-glass"></i> Destination / Sanctuary</label>
+            <input type="text" id="liveSearchInput" placeholder="Search by name, city, or country..." autocomplete="off">
+        </div>
+        <div class="search-field">
+            <label for="categoryFilterSelect"><i class="fa-solid fa-compass-drafting"></i> Architectural Style</label>
+            <select id="categoryFilterSelect" onchange="window.location.href=this.value ? '/listings?category=' + encodeURIComponent(this.value) : '/listings'">
+                <option value="">All Architectural Styles</option>
+                <% for (let option of filterOptionsSafe) { %>
+                    <option value="<%= option.label %>" <%= selectedCategorySafe === option.label ? 'selected' : '' %>>
+                        <%= option.label %>
+                    </option>
+                <% } %>
+            </select>
+        </div>
+        <div class="search-field">
+            <label for="maxPriceSelect"><i class="fa-solid fa-sliders"></i> Price Range</label>
+            <select id="maxPriceSelect">
+                <option value="all">Any Price</option>
+                <option value="1500">Under &#8377;1,500/nt</option>
+                <option value="2500">Under &#8377;2,500/nt</option>
+                <option value="5000">Under &#8377;5,000/nt</option>
+                <option value="luxury">&#8377;5,000+/nt</option>
+            </select>
+        </div>
+        <div>
+            <button type="button" id="clearFiltersBtn" class="btn-blueprint" style="height: 44px; margin-top: 1rem;">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+            </button>
+        </div>
     </form>
-    -->
-        <section class="explore-hero">
-            <h2>Explore Cozy Stays</h2>
-            <p>Discover weekend cabins, beach homes, and stylish city stays.</p>
-        </section>
 
-        <button id="toggleFiltersBtn" class="toggle-filters-btn">
-            <i class="fa-solid fa-sliders"></i>
-            Show Filters
-        </button>
-
-        <div id="filters" class="filters-hidden">
-            <a class="filter-chip <%= selectedCategorySafe ? '' : 'active-filter' %>" href="/listings">
+    <!-- Stamped Categories & Total Tax Switch -->
+    <div class="category-filter-strip">
+        <div class="category-scroll-container">
+            <a class="category-pill <%= selectedCategorySafe ? '' : 'active' %>" href="/listings">
+                <span class="pill-number">[00]</span>
                 <i class="fa-solid fa-border-all"></i>
-                All
+                All Collections
             </a>
-            <% for (let option of filterOptionsSafe) { %>
-                <a class="filter-chip <%= selectedCategorySafe === option.label ? 'active-filter' : '' %>"
-                    href="/listings?category=<%= encodeURIComponent(option.label) %>">
+            <% filterOptionsSafe.forEach((option, idx) => { 
+                const num = (idx + 1) < 10 ? '0' + (idx + 1) : (idx + 1);
+            %>
+                <a class="category-pill <%= selectedCategorySafe === option.label ? 'active' : '' %>"
+                   href="/listings?category=<%= encodeURIComponent(option.label) %>">
+                    <span class="pill-number">[<%= num %>]</span>
                     <i class="fa-solid <%= option.icon %>"></i>
                     <%= option.label %>
                 </a>
-            <% } %>
+            <% }); %>
         </div>
-        <% if (allListings.length === 0) { %>
-            <section class="empty-explore-state mt-4">
-                <h4>No stays listed yet</h4>
-                <p>
-                    <%= selectedCategorySafe ? `No stays found in ${selectedCategorySafe}. Try another category or add one.` : 'Be the first to add a home and make this Explore page come alive.' %>
-                </p>
-                <a class="btn btn-dark" href="/listings/new">Add First Home</a>
-            </section>
-        <% } else { %>
-            <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-                <% for(let listing of allListings){ %>
-                    <a href="/listings/<%= listing._id%>">
-                        <div class="card listing-card col" style="width: 20rem;">
-                            <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image"
-                                style="height: 20rem;">
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <%= listing.title%><br />
-                                        &#8377;<%= listing.price %>/night<br />
-                                </p>
+
+        <!-- Tax & Fee Dynamic Calculation Toggle Switch -->
+        <div class="tax-toggle-wrapper">
+            <span>Show Total with Taxes (18%)</span>
+            <label class="switch-control" for="taxToggle">
+                <input type="checkbox" id="taxToggle" aria-label="Toggle tax display">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- AI Spatial Intent Matcher Console (Illoca AI Engine) -->
+    <div style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border-hairline);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
+            <span class="mono-stamp" style="color: var(--brand-cobalt); font-weight: bold;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AI SPATIAL INTENT MATCHER // ILLOCA ALGORITHM
+            </span>
+            <span class="mono-stamp" style="color: var(--ink-muted);">PROMPT-TO-ARCHITECTURE COMPATIBILITY</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <input type="text" id="spatialIntentInput" class="form-control" style="flex: 1; min-width: 280px;" placeholder="Describe your creative spatial intent (e.g. 'Photographer seeking morning eastern light, polished concrete, high acoustic seclusion')...">
+            <button type="button" class="btn-kinetic" id="btnRunSpatialMatch" style="height: 42px;">
+                <div class="btn-kinetic-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+                <div class="btn-kinetic-label-wrap">
+                    <div class="btn-kinetic-roll">
+                        <span>Analyze Spatial Fit</span>
+                        <span>Analyze Spatial Fit</span>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dynamic Scorecard Result Box -->
+        <div id="spatialMatchResultBox" style="display: none; margin-top: 1rem; background: var(--canvas-surface-secondary); border: 1px solid var(--border-medium); border-radius: var(--radius-xs); padding: 1.25rem;"></div>
+    </div>
+</section>
+
+<!-- Sanctuary Listings Masonry -->
+<section class="listing-grid-section">
+    <% if (allListings.length === 0) { %>
+        <div class="empty-explore-state">
+            <div style="font-size: 2.5rem; color: var(--ink-muted); margin-bottom: 1rem;">
+                <i class="fa-solid fa-compass-drafting"></i>
+            </div>
+            <h4>No sanctuaries currently available</h4>
+            <p>
+                <%= selectedCategorySafe ? `We found no spaces currently in the ${selectedCategorySafe} collection. Explore other coordinates or introduce your own haven.` : 'Be the first to list an architectural retreat and bring this collection to life.' %>
+            </p>
+            <a class="btn-blueprint" href="/listings/new">
+                <i class="fa-solid fa-plus"></i> Add Sanctuary
+            </a>
+        </div>
+    <% } else { %>
+        <div class="listings-masonry" id="listingsContainer">
+            <% for(let listing of allListings){ 
+                const rawPrice = Number(listing.price) || 1200;
+                const priceWithTax = Math.round(rawPrice * 1.18);
+                const listingCategory = listing.category || "Trending";
+            %>
+                <article class="sanctuary-card" 
+                         data-title="<%= (listing.title || '').toLowerCase() %>"
+                         data-location="<%= (listing.location || '').toLowerCase() %>, <%= (listing.country || '').toLowerCase() %>"
+                         data-price="<%= rawPrice %>"
+                         data-category="<%= listingCategory %>">
+                    <a href="/listings/<%= listing._id %>" style="display: flex; flex-direction: column; height: 100%;">
+                        <!-- Media Card with Stamped Badges -->
+                        <div class="card-media-wrapper">
+                            <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470' %>" 
+                                 class="card-media-img" 
+                                 alt="<%= listing.title %>"
+                                 loading="lazy">
+                            
+                            <div class="card-stamp-top-left">
+                                <span class="badge-architectural badge-cobalt">
+                                    <%= listingCategory %>
+                                </span>
+                            </div>
+
+                            <div class="card-stamp-top-right">
+                                <button type="button" class="wishlist-heart-btn" aria-label="Save to favorites" onclick="event.preventDefault(); this.classList.toggle('active');">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Content Pane -->
+                        <div class="card-content-pane">
+                            <div class="card-header-row">
+                                <h3 class="sanctuary-title"><%= listing.title %></h3>
+                            </div>
+
+                            <div class="card-location-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span><%= listing.location %>, <%= listing.country %></span>
+                            </div>
+
+                            <!-- Architectural Specs Telemetry -->
+                            <div class="card-specs-bar">
+                                <span><i class="fa-solid fa-bed"></i> 2-4 Beds</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-bath"></i> 2 Baths</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-ruler-combined"></i> ~1,850 SQ.FT</span>
+                            </div>
+
+                            <div class="card-footer-row">
+                                <div class="price-container">
+                                    <span class="price-currency-rate">
+                                        &#8377;<%= rawPrice.toLocaleString("en-IN") %> <small>/ night</small>
+                                    </span>
+                                    <span class="price-total-hint">
+                                        &#8377;<%= priceWithTax.toLocaleString("en-IN") %> total incl. taxes
+                                    </span>
+                                </div>
+
+                                <div class="card-action-arrow">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </div>
                             </div>
                         </div>
                     </a>
-                <% } %>
-            </div>
-        <% } %>
+                </article>
+            <% } %>
+        </div>
+    <% } %>
+</section>

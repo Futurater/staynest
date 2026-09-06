@@ -1,23 +1,80 @@
-<nav class="navbar navbar-expand-md navbar-light bg-dark border-bottom sticky-top ">
-  <a class="navbar-brand brand-logo" href="/listings">
-    <span class="brand-badge"><i class="fa-solid fa-compass"></i></span>
-    <span class="brand-text">StayNest</span>
-  </a>
-  <a class="nav-link explore-link" href="/listings">Explore</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav ml-auto">
-      <a class="nav-link" href="/listings/new">New Home</a>
-      <% if(!currentUser){ %>
-        <a class="nav-link" href="/signup">Sign Up</a>
-        <a class="nav-link" href="/login">Log In</a>
-        <% } %>
-          <% if(currentUser){ %>
-            <a class="nav-link" href="/logout">Logout</a>
-
-            <% } %>
+<header class="staynest-header">
+  <div class="site-container">
+    <!-- Top Telemetry Strip (United Carriers / Illoca style) -->
+    <div class="nav-telemetry-strip">
+      <div class="nav-telemetry-left">
+        <span>STAYNEST® [SYS-VER: 2.6.4]</span>
+        <span>•</span>
+        <span>LAT 40.7128° N, LNG 74.0060° W</span>
+      </div>
+      <div class="nav-telemetry-right">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          PLATFORM OPERATIONAL // APAC & GLOBAL
+        </span>
+        <span>•</span>
+        <span>EDITION 2026</span>
+      </div>
     </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="staynest-navbar">
+      <!-- Brand Logo & Identity -->
+      <a href="/listings" class="brand-wrapper">
+        <div class="brand-icon-box">
+          <i class="fa-solid fa-compass-drafting"></i>
+        </div>
+        <div class="brand-text-group">
+          <span class="brand-title">StayNest</span>
+          <span class="brand-tagline">Architectural Sanctuaries</span>
+        </div>
+      </a>
+
+      <!-- Center Editorial Navigation Links -->
+      <ul class="nav-menu-links">
+        <li><a href="/listings" class="nav-roll-link">Explore Havens</a></li>
+        <li><a href="/expeditions" class="nav-roll-link">Expeditions</a></li>
+        <li><a href="/listings?category=Cabins" class="nav-roll-link">Minimalist Cabins</a></li>
+        <li><a href="/listings?category=Luxury" class="nav-roll-link">Pavilions & Villas</a></li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="nav-actions">
+        <% if(!currentUser) { %>
+          <a href="/login" class="nav-roll-link" style="margin-right: 0.5rem;">Sign In</a>
+          <a href="/signup" class="nav-roll-link" style="margin-right: 0.85rem;">Register</a>
+          <% } else { %>
+            <div class="nav-user-pill">
+              <div class="nav-user-avatar">
+                <%= currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U' %>
+              </div>
+              <span>
+                <%= currentUser.username %>
+              </span>
+              <a href="/logout" title="Log Out" style="color: var(--ink-muted); margin-left: 0.25rem;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              </a>
+            </div>
+            <% } %>
+
+              <!-- Kinetic Button for Listing Creation -->
+              <a href="/listings/new" class="btn-kinetic">
+                <div class="btn-kinetic-icon">
+                  <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="btn-kinetic-label-wrap">
+                  <div class="btn-kinetic-roll">
+                    <span>List a Sanctuary</span>
+                    <span>List a Sanctuary</span>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Mobile Menu Toggle -->
+              <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars"></i>
+              </button>
+      </div>
+    </nav>
   </div>
-</nav>
+</header>

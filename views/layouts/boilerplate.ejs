@@ -3,26 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayNest</title>
+    <title>StayNest — Curated Architectural Sanctuaries & Havens</title>
+    <meta name="description" content="Discover architect-designed retreats, brutalist pavilions, minimalist lofts, and coastal sanctuaries across the globe.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232554D7'><path d='M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z'/></svg>">
+    
+    <!-- Bootstrap CSS for grid system -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- Google Fonts: Editorial Display (Syne & Space Grotesk) + Crisp UI (Plus Jakarta Sans) + Telemetry Mono (Geist Mono / Space Mono) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- StayNest Modern Design System -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-    <%- include("../includes/navbar.ejs")%>
-     <div class="container">
-     
-      <%- include("../includes/flash.ejs")%>
-      <%- body -%> </div> 
-     <%- include("../includes/footer.ejs")%>
+<body class="staynest-body">
+    <!-- Subtle Architectural Background Grid & Watermark Coordinates -->
+    <div class="bg-grid-overlay" aria-hidden="true"></div>
     
-     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-      <script src="/js/javas.js"></script>
-      <script src="/js/chat-widget.js"></script>
-    </body>
+    <!-- Floating Telemetry Bar & Main Navigation -->
+    <%- include("../includes/navbar.ejs")%>
+    
+    <main class="main-content-wrapper">
+        <div class="container-fluid site-container">
+            <%- include("../includes/flash.ejs")%>
+            <%- body -%>
+        </div>
+    </main>
+    
+    <!-- Elevated Swiss-Grid Footer -->
+    <%- include("../includes/footer.ejs")%>
+    
+    <!-- Core Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="/js/javas.js"></script>
+    <script src="/js/chat-widget.js"></script>
+</body>
 </html>

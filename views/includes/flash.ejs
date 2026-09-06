@@ -1,18 +1,23 @@
 <% if (typeof success !== 'undefined' && success.length > 0) { %>
-  <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-    <%= success %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+  <div class="staynest-alert staynest-alert-success mt-3" role="alert">
+    <div style="display: flex; align-items: center; gap: 0.65rem;">
+      <i class="fa-solid fa-circle-check"></i>
+      <span><%= success %></span>
+    </div>
+    <button type="button" class="alert-close-btn" onclick="this.parentElement.remove()" aria-label="Dismiss notification">
+      <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
 <% } %>
 
-
-<% if (typeof error !=='undefined' && error.length > 0) { %>
-  <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-    <%= error %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+<% if (typeof error !== 'undefined' && error.length > 0) { %>
+  <div class="staynest-alert staynest-alert-error mt-3" role="alert">
+    <div style="display: flex; align-items: center; gap: 0.65rem;">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span><%= error %></span>
+    </div>
+    <button type="button" class="alert-close-btn" onclick="this.parentElement.remove()" aria-label="Dismiss notification">
+      <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
 <% } %>
