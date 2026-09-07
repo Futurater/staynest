@@ -39,27 +39,34 @@
         
         <!-- Mobile Drawer Extras -->
         <li class="mobile-drawer-item">
+          <div class="mobile-drawer-divider">
+            <span class="mono-stamp" style="font-size: 0.65rem; color: var(--ink-muted); letter-spacing: 0.08em;">ACCOUNT & ACCESS</span>
+          </div>
           <% if(!currentUser) { %>
             <div class="mobile-auth-buttons">
-              <a href="/login" class="btn-blueprint" style="flex: 1; text-align: center; justify-content: center;">Sign In</a>
-              <a href="/signup" class="btn-blueprint" style="flex: 1; text-align: center; justify-content: center; background: var(--ink-primary); color: #fff !important;">Register</a>
+              <a href="/login" class="btn-blueprint mobile-sign-in-btn">
+                <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right: 0.4rem;"></i> Sign In
+              </a>
+              <a href="/signup" class="btn-blueprint mobile-register-btn">
+                <i class="fa-solid fa-user-plus" style="margin-right: 0.4rem;"></i> Register
+              </a>
             </div>
           <% } else { %>
             <div class="mobile-user-profile">
-              <div class="nav-user-pill" style="border: none; padding: 0;">
+              <div class="nav-user-pill" style="border: none; padding: 0; background: transparent;">
                 <div class="nav-user-avatar">
                   <%= currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U' %>
                 </div>
-                <span style="font-weight: 700; margin-left: 0.5rem;"><%= currentUser.username %></span>
+                <span style="font-weight: 700; margin-left: 0.6rem; color: var(--ink-primary);"><%= currentUser.username %></span>
               </div>
-              <a href="/logout" class="btn-blueprint" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+              <a href="/logout" class="btn-blueprint mobile-logout-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 0.3rem;"></i> Log Out
               </a>
             </div>
           <% } %>
-          <div style="margin-top: 0.85rem;">
-            <a href="/listings/new" class="btn-blueprint" style="width: 100%; justify-content: center; background: var(--canvas-surface-dark); color: #fff !important;">
-              <i class="fa-solid fa-plus"></i> List a Sanctuary
+          <div style="margin-top: 0.75rem;">
+            <a href="/listings/new" class="btn-blueprint mobile-list-sanctuary-btn">
+              <i class="fa-solid fa-plus" style="margin-right: 0.4rem;"></i> List a Sanctuary
             </a>
           </div>
         </li>

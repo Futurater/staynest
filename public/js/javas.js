@@ -165,30 +165,46 @@
       updateReservationCalculation();
     }
 
-    // 05. Mobile Navigation Toggle — #27 FIX: Proper open/close with animation
+    // 05. Mobile Navigation Toggle & Drawer Handler
     const mobileNavToggle = document.getElementById('mobileNavToggle');
     const navMenuLinks = document.querySelector('.nav-menu-links');
     if (mobileNavToggle && navMenuLinks) {
-      let mobileMenuOpen = false;
-
-      mobileNavToggle.addEventListener('click', function() {
-        mobileMenuOpen = !mobileMenuOpen;
-        if (mobileMenuOpen) {
-          navMenuLinks.classList.add('mobile-open');
-          mobileNavToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-        } else {
-          navMenuLinks.classList.remove('mobile-open');
-          mobileNavToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      function setDrawerState(open) {
+        navMenuLinks.classList.toggle('mobile-open', open);
+        mobileNavToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        const icon = mobileNavToggle.querySelector('i');
+        if (icon) {
+          if (open) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+          } else {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+          }
         }
+      }
+
+      mobileNavToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const willOpen = !navMenuLinks.classList.contains('mobile-open');
+        setDrawerState(willOpen);
       });
 
-      // Close menu when a nav link is clicked
+      // Close menu when any nav link is clicked
       navMenuLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function() {
-          mobileMenuOpen = false;
-          navMenuLinks.classList.remove('mobile-open');
-          mobileNavToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+          setDrawerState(false);
         });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (navMenuLinks.classList.contains('mobile-open')) {
+          if (!navMenuLinks.contains(e.target) && !mobileNavToggle.contains(e.target)) {
+            setDrawerState(false);
+          }
+        }
       });
     }
 
@@ -401,38 +417,6 @@
           });
           alert('Network error. Please try again.');
         });
-      });
-    }
-
-    // 08. Mobile Navigation Drawer Toggle
-    const mobileNavToggle = document.getElementById('mobileNavToggle');
-    const navMenuLinks = document.querySelector('.nav-menu-links');
-    if (mobileNavToggle && navMenuLinks) {
-      mobileNavToggle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const isOpen = navMenuLinks.classList.toggle('mobile-open');
-        const icon = mobileNavToggle.querySelector('i');
-        if (icon) {
-          if (isOpen) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-xmark');
-          } else {
-            icon.classList.remove('fa-xmark');
-            icon.classList.add('fa-bars');
-          }
-        }
-      });
-
-      // Close drawer when clicking outside
-      document.addEventListener('click', function(e) {
-        if (navMenuLinks.classList.contains('mobile-open') && !navMenuLinks.contains(e.target) && !mobileNavToggle.contains(e.target)) {
-          navMenuLinks.classList.remove('mobile-open');
-          const icon = mobileNavToggle.querySelector('i');
-          if (icon) {
-            icon.classList.remove('fa-xmark');
-            icon.classList.add('fa-bars');
-          }
-        }
       });
     }
   });
